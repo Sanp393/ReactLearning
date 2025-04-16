@@ -1,42 +1,51 @@
 console.log('App.js is running!')
 
-// create app object title/subtitle.
-// use title/subtitle in the template.
-// render template.
-
-var pokemon = {
+const pokemon = {
     name: 'Charizard',
-    type: 'Fire & Flying' 
+    preEvolution: 'Charmeleon',
+    type: []
 };
 
 // JSX - JavaScript XML
-var template = (
-    <div>
-        <h1>{pokemon.name}</h1>
-        <p>{pokemon.type}</p>
-        <ol>
-            <li>Flamethrower</li>
-            <li>Flying</li>
-            <li>Dragon dance</li>
-            <li>Dragon claw</li>
-        </ol>
-    </div>
-);
+const onFormSubmit = (e) => {
+    e.preventDefault();
 
-var user = {
-    name: 'Guille',
-    age: 26,
-    location: 'Barcelona'
+    const option = e.target.elements.option.value;
+
+    if(option){
+        pokemon.type.push(option);
+        e.target.elements.option.value = '';
+        renderTemplate();
+    }
 };
 
-var templateTwo = (
-    <div>
-        <h1>{user.name}</h1>
-        <p>Age: {user.age}.</p>
-        <p>Location: {user.location}.</p>
-    </div>
-);
+const eraseTypeList =  () => {
+    pokemon.type = [];
+    renderTemplate();
+};
 
-var appRoot = document.getElementById('app');
+const appRoot = document.getElementById('app');
 
-ReactDOM.render(template, appRoot);
+const renderTemplate = () => {
+    const template = (
+        <div>
+            <h1>{pokemon.name}</h1>
+            {pokemon.preEvolution && <p>PreEvolution: {pokemon.preEvolution}</p>}
+            <p>{pokemon.type.length > 0 ? 'Types: ' + pokemon.type[0] : 'Unknown'}</p>
+            <p>{pokemon.type.length}</p>
+            <button onClick={eraseTypeList}>Remove all!</button>
+            <ol>
+                {
+                    pokemon.type.map((type) => <li key={type}>{type}</li>)
+                }
+            </ol>
+            <form onSubmit={onFormSubmit}>
+                <input type="text" name="option"/>
+                <button>Add Option!</button>
+            </form>
+        </div>
+    );
+    ReactDOM.render(template, appRoot);
+};
+
+renderTemplate();

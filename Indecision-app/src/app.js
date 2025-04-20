@@ -24,6 +24,12 @@ const eraseTypeList =  () => {
     renderTemplate();
 };
 
+const onMakeDecision = () => {
+    const randomNum = Math.floor(Math.random() * pokemon.type.length);
+    const option = pokemon.type[randomNum];
+    alert(option);
+};
+
 const appRoot = document.getElementById('app');
 
 const renderTemplate = () => {
@@ -33,6 +39,7 @@ const renderTemplate = () => {
             {pokemon.preEvolution && <p>PreEvolution: {pokemon.preEvolution}</p>}
             <p>{pokemon.type.length > 0 ? 'Types: ' + pokemon.type[0] : 'Unknown'}</p>
             <p>{pokemon.type.length}</p>
+            <button disabled={pokemon.type.length === 0} onClick={onMakeDecision}>What sould Ido?</button>
             <button onClick={eraseTypeList}>Remove all!</button>
             <ol>
                 {

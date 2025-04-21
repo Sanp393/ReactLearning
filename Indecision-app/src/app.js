@@ -1,58 +1,94 @@
-console.log('App.js is running!')
+class IndecisionApp extends React.Component {
+    render() {
+        const title = 'Indecision';
+        const subtitle = 'Put your life in the hands of a computer!';
+        const options = ['This 1', 'This 2', 'This 3'];
 
-const pokemon = {
-    name: 'Charizard',
-    preEvolution: 'Charmeleon',
-    type: []
-};
+        return (
+            <div>
+                <Header title={title} subtitle={subtitle} />
+                <Action />
+                <Options options={options} />
+                <AddOption />
+            </div>
+        );
+    }
+}
 
-// JSX - JavaScript XML
-const onFormSubmit = (e) => {
+class Header extends React.Component {
+    render() {
+        return (
+            <div>
+                <h1>{this.props.title}</h1>
+                <h2>{this.props.subtitle}</h2>
+            </div>
+        );
+    }
+}
+
+class Action extends React.Component {
+    handlePick() {
+        alert('handlePick')
+    }
+    render() {
+        return (
+            <div>
+                <button onClick={this.handlePick}>What should I do?</button>
+            </div>
+        );
+    }
+}
+
+class Options extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleRemoveAll = this.handleRemoveAll.bind(this);
+    }
+    handleRemoveAll(){
+        alert('handleRemoveAll')
+    }
+    render() {
+        return (
+            <div>
+                <button onClick={this.handleRemoveAll}>Remove All!</button>
+                {this.props.options.length}
+                {this.props.options.map((option) => <Option key={option} optionText={option} />)}
+            </div>
+        );
+    }
+}
+
+class Option extends React.Component {
+    render () {
+        return (
+            <div>
+                {this.props.optionText}
+            </div>
+        );
+    }
+}
+
+class AddOption extends React.Component {
+handleAddOption(e) {
     e.preventDefault();
 
-    const option = e.target.elements.option.value;
+    const option = e.target.elements.option.value.trim();
 
-    if(option){
-        pokemon.type.push(option);
-        e.target.elements.option.value = '';
-        renderTemplate();
+    if(option) {
+        alert(option);
     }
-};
+}
 
-const eraseTypeList =  () => {
-    pokemon.type = [];
-    renderTemplate();
-};
+    render(){
+        return (
+            <div>
+                <form onSubmit={this.handleAddOption}>
+                    <input type="text" name="option" />
+                    <button>Add Option!</button>
+                </form>
+            </div>
+        );
+    }
+}
 
-const onMakeDecision = () => {
-    const randomNum = Math.floor(Math.random() * pokemon.type.length);
-    const option = pokemon.type[randomNum];
-    alert(option);
-};
-
-const appRoot = document.getElementById('app');
-
-const renderTemplate = () => {
-    const template = (
-        <div>
-            <h1>{pokemon.name}</h1>
-            {pokemon.preEvolution && <p>PreEvolution: {pokemon.preEvolution}</p>}
-            <p>{pokemon.type.length > 0 ? 'Types: ' + pokemon.type[0] : 'Unknown'}</p>
-            <p>{pokemon.type.length}</p>
-            <button disabled={pokemon.type.length === 0} onClick={onMakeDecision}>What sould Ido?</button>
-            <button onClick={eraseTypeList}>Remove all!</button>
-            <ol>
-                {
-                    pokemon.type.map((type) => <li key={type}>{type}</li>)
-                }
-            </ol>
-            <form onSubmit={onFormSubmit}>
-                <input type="text" name="option"/>
-                <button>Add Option!</button>
-            </form>
-        </div>
-    );
-    ReactDOM.render(template, appRoot);
-};
-
-renderTemplate();
+ReactDOM.render(<IndecisionApp />, document.getElementById('app'));
